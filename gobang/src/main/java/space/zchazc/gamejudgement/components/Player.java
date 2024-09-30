@@ -1,15 +1,17 @@
-package space.zchazc.gamejudgement;
+package space.zchazc.gamejudgement.components;
 
-import space.zchazc.gamejudgement.ai.FirstEmptyPlayer;
-import space.zchazc.gamejudgement.ai.GoBangPlayer;
-import space.zchazc.gamejudgement.ai.RandomPlayer;
 import javafx.scene.paint.Color;
+import space.zchazc.gamejudgement.operator.GoBangOperator;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -30,36 +32,38 @@ public class Player {
 
 
 
-    public final GoBangPlayer operator;
+    private GoBangOperator operator;
 
     public final int id;
 
-    final String name;
-    final Color color;
-
-    public Player(Color color) {
-        this.color = color;
-        this.id = SEQ_GENERATOR.getAndIncrement();
-        this.name = "PLAYER-"+id;
-        this.operator = id % 2 == 0 ? RandomPlayer.DEFAULT: FirstEmptyPlayer.DEFAULT;
-    }
+    public final String name;
+    public final Color color;
 
     public Player() {
         this.id = SEQ_GENERATOR.getAndIncrement();
         this.color = NAMED_COLORS.get(ORDERED_COLOR.get(id % ORDERED_COLOR.size()));
         this.name = "PLAYER-"+id;
-        this.operator = id % 2 == 0 ? RandomPlayer.DEFAULT: FirstEmptyPlayer.DEFAULT;
     }
 
-    public Player(GoBangPlayer operator) {
+    public Player(GoBangOperator operator) {
         this.id = SEQ_GENERATOR.getAndIncrement();
         this.color = NAMED_COLORS.get(ORDERED_COLOR.get(id % ORDERED_COLOR.size()));
-        this.name = "PLAYER-"+id;
+        this.name = "PLAYER-"+id+"["+operator.name+"]";
         this.operator = operator;
+        operator.setPlayerId(id);
     }
 
     public static void resetSeq(){
         SEQ_GENERATOR.set(1);
+    }
+
+    public GoBangOperator getOperator() {
+        return operator;
+    }
+
+    public void setOperator(GoBangOperator operator) {
+        operator.resetPlayerId(id);
+        this.operator = operator;
     }
 
     @Override
@@ -72,7 +76,25 @@ public class Player {
     }
 
     public static void main(String[] args) {
+        CompletableFuture<String> cf = new CompletableFuture<>();
+        cf.completeAsync(()->{
+            try {
+                Thread.sleep(2999);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return "SUC";
+        });
 
+        try {
+            System.out.println(cf.get(3000, TimeUnit.MILLISECONDS));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

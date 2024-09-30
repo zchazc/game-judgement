@@ -1,4 +1,4 @@
-package space.zchazc.gamejudgement;
+package space.zchazc.gamejudgement.components;
 
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)

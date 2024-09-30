@@ -1,9 +1,11 @@
-package space.zchazc.gamejudgement.ai.old;
+package space.zchazc.gamejudgement.operator.obsolate;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import space.zchazc.gamejudgement.*;
-import space.zchazc.gamejudgement.ai.GoBangAIService;
+import space.zchazc.gamejudgement.GoBangApp;
+import space.zchazc.gamejudgement.components.Player;
+import space.zchazc.gamejudgement.components.TileCombo;
+import space.zchazc.gamejudgement.view.TileViewComponent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +19,9 @@ import java.util.function.Predicate;
 public class RuleBasedService extends GoBangAIService {
 
     private List<Predicate<TileCombo> > aiPredicates = Arrays.asList(
-            c -> c.isTwoThirds(TileValue.O),
-            c -> c.isTwoThirds(TileValue.X),
-            c -> c.isOneThird(TileValue.O),
+//            c -> c.isTwoThirds(TileValue.O),
+//            c -> c.isTwoThirds(TileValue.X),
+//            c -> c.isOneThird(TileValue.O),
             c -> c.isOpen(),
             c -> c.getFirstEmpty() != null
     );
@@ -41,6 +43,6 @@ public class RuleBasedService extends GoBangAIService {
                 // should not happen
                 .orElseThrow(() -> new IllegalStateException("No empty tiles"));
 
-        tile.getComponent(TileViewComponent.class).mark(TileValue.O);
+        tile.getComponent(TileViewComponent.class).mark(player);
     }
 }

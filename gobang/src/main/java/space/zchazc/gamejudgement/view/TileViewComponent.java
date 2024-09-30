@@ -1,4 +1,4 @@
-package space.zchazc.gamejudgement;
+package space.zchazc.gamejudgement.view;
 
 import com.almasb.fxgl.dsl.components.view.ChildViewComponent;
 import javafx.animation.KeyFrame;
@@ -11,6 +11,9 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import space.zchazc.gamejudgement.GoBangApp;
+import space.zchazc.gamejudgement.components.Player;
+import space.zchazc.gamejudgement.components.TileValue;
 
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
@@ -21,9 +24,9 @@ public class TileViewComponent extends ChildViewComponent {
 
     private Player player = null;
 
-    private Arc arc = new Arc(34, 37, 34, 37, 0, 0);
+    private Arc arc = new Arc(GoBangApp.CELL_SIZE/2, GoBangApp.CELL_SIZE/2, GoBangApp.CELL_SIZE/2, GoBangApp.CELL_SIZE/2, 0, 0);
     private Line line1 = new Line(0, 0, 0, 0);
-    private Line line2 = new Line(75, 0, 75, 0);
+    private Line line2 = new Line(GoBangApp.CELL_SIZE, 0, GoBangApp.CELL_SIZE, 0);
 
     public TileViewComponent() {
         Rectangle bg = new Rectangle(GoBangApp.CELL_SIZE, GoBangApp.CELL_SIZE, Color.rgb(13, 222, 236));
@@ -49,30 +52,8 @@ public class TileViewComponent extends ChildViewComponent {
         return player == null;
     }
 
-
-    public TileValue getValue() {
-        return value;
-    }
-
     public Player getPlayer(){
         return player;
-    }
-
-
-
-    /**
-     * @param value tile value
-     * @return true if marking succeeded
-     */
-    public boolean mark(TileValue value) {
-        if (this.value != TileValue.NONE)
-            return false;
-
-        this.value = value;
-
-        animate(value);
-
-        return true;
     }
 
     public boolean mark(Player player) {
@@ -94,28 +75,4 @@ public class TileViewComponent extends ChildViewComponent {
         timeline.play();
     }
 
-    public void animate(TileValue value) {
-        if (value == TileValue.O) {
-            KeyFrame frame = new KeyFrame(Duration.seconds(0.5),
-                    new KeyValue(arc.lengthProperty(), 360));
-
-            Timeline timeline = new Timeline(frame);
-            timeline.play();
-        } else {
-
-            line1.setVisible(true);
-            line2.setVisible(true);
-
-            KeyFrame frame1 = new KeyFrame(Duration.seconds(0.5),
-                    new KeyValue(line1.endXProperty(), 75),
-                    new KeyValue(line1.endYProperty(), 75));
-
-            KeyFrame frame2 = new KeyFrame(Duration.seconds(0.5),
-                    new KeyValue(line2.endXProperty(), 0),
-                    new KeyValue(line2.endYProperty(), 75));
-
-            Timeline timeline = new Timeline(frame1, frame2);
-            timeline.play();
-        }
-    }
 }

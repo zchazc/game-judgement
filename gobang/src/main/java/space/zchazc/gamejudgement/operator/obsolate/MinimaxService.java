@@ -1,12 +1,11 @@
-package space.zchazc.gamejudgement.ai.old;
+package space.zchazc.gamejudgement.operator.obsolate;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import space.zchazc.gamejudgement.GoBangApp;
-import space.zchazc.gamejudgement.Player;
-import space.zchazc.gamejudgement.TileValue;
-import space.zchazc.gamejudgement.TileViewComponent;
-import space.zchazc.gamejudgement.ai.GoBangAIService;
+import space.zchazc.gamejudgement.components.Player;
+import space.zchazc.gamejudgement.components.TileValue;
+import space.zchazc.gamejudgement.view.TileViewComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +29,13 @@ public class MinimaxService extends GoBangAIService {
         // the algorithm uses [row][col]
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                cells[y][x] = board[x][y].getComponent(TileViewComponent.class).getValue();
+//                cells[y][x] = board[x][y].getComponent(TileViewComponent.class).getValue();
             }
         }
 
         int[] result = minimax(2, mySeed); // depth, max turn
 
-        board[result[2]][result[1]].getComponent(TileViewComponent.class).mark(mySeed);
+        board[result[2]][result[1]].getComponent(TileViewComponent.class).mark(player);
     }
 
 
